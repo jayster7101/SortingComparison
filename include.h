@@ -6,5 +6,10 @@
 #include <cctype>
 #include <sstream>
 #include "SelectionSort.h"
+#include <chrono>
+#include "InsertionSort.h"
+#include "BubbleSort.h"
+#include "MergeSort.h" 
+#include "QuickSort.h"
 
 #endif
