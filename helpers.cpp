@@ -1,7 +1,5 @@
 #include "helpers.h"
 #include "include.h"
-
-
 std::string get_file_name()
 {
     std::string file;
@@ -194,11 +192,13 @@ int load_data(std::string dont_want[], std::string** array)
             if(good) count ++;
         }
     };
+    // std::cout << "Before in.close" << std::endl;
     in.close();
     in.open("temp.txt");
     std::string *temp = new std::string[count];
+    // std::cout << "after new is called " << std::endl;
    
-    int t;
+    int t = 0;
     while(getline(in,line))
     {   
         std::stringstream ss(line);
@@ -215,14 +215,19 @@ int load_data(std::string dont_want[], std::string** array)
                 }
             }
             if(good)
-            {    
+            {   
+                // std::cout << "before temp[t] = current" << std::endl; 
                temp[t] = current;
+            //    std::cout << "after temp[t] = current" << std::endl; 
                 //std::cout << array[t];
                 t++;
             }
         }
-        
-         *array = temp;
+        // std::cout << "before array = temp" << std::endl;
+        *array = temp;
+        // std::cout << "after array = temp" << std::endl;
+        //delete []temp;
+        // std::cout << "after delete temp" << std::endl;
          
     };
     //array = temp; // changes address to array we created in function
@@ -293,56 +298,67 @@ void display_list(int list)
 
 }
 
-void run_time_call(std::string wrong_words[], std::string **data, bool sorted, double address[])
+int run_time_call(std::string wrong_words[], std::string **data, double address[], int first, int second)
 {
-    int *n = pick_algo();
-    int first = n[0];
-    int second = n[1];
+    
+
     int size = load_data(wrong_words,data);
     double algo1[5];
-    double algo2[5];
-    if(sorted)mergesortTimer(*data,0,size);
+    double algo2[5]; 
+    int offset = 0;
+    for(int k  =  0; k < 2 ; k++)
+{        
+    if(k == 1) {offset = 5; bubblesortTimer(*data,size);}
     for(int i = 0; i < 5; i++)
-    {
+        {
+            std::string runner[size];
+            copy(runner,*data,size);
+            switch (first)
+            {
+            case 1:
+                if(k > 1) {algo1[i] = selectionsortTimer(*data,size); break;}
+                else {algo1[i] = selectionsortTimer(runner,size); break;}
+            case 2:
+                if(k > 1) {algo1[i] = insertionsortTimer(*data,size); break;}
+                else {algo1[i] = insertionsortTimer(runner,size); break;}
+            case 3:
+                if(k > 1) {algo1[i] = bubblesortTimer(*data, size); break;}
+                else {algo1[i] = bubblesortTimer(runner,size); break;}
+            }
+        }
+        for(int i = 0; i < 5; i++)
+        {
         std::string runner[size];
         copy(runner,*data,size);
-        switch (first)
+            switch (second)
+            {
+            case 4:
+            if(k > 1) {algo2[i] = mergesortTimer(*data, 0 , size); break;}
+            else {algo2[i] = mergesortTimer(runner, 0 , size); break;}
+            case 5:
+            if(k > 1) {algo2[i] = quicksortTimer(*data, 0 , size); break;}
+            else {algo2[i] = quicksortTimer(runner, 0 , size); break;}
+            } 
+        }
+    for(int i = 0; i < 5; i++)
+    {
+        if(k == 0 ) 
         {
-        case 1:
-            if(sorted) {algo1[i] = selectionsortTimer(*data,size); break;}
-            else {algo1[i] = selectionsortTimer(runner,size); break;}
-        case 2:
-            if(sorted) {algo1[i] = insertionsortTimer(*data,size); break;}
-            else {algo1[i] = insertionsortTimer(runner,size); break;}
-        case 3:
-            if(sorted) {algo1[i] = bubblesortTimer(*data, size); break;}
-            else {algo1[i] = bubblesortTimer(runner,size); break;}
+            address[i] = algo1[i]; // unsorted n^2 0 - 4 
+            address[i + 5] = algo2[i]; // unsorted n log(n) = 5 - 9
+        }
+        if(k == 1)
+        {
+            address[i+10] = algo1[i]; // sorted n^2 10 - 14 
+            address[i + 15] = algo2[i];  // sorted n log(n) = 15 - 19
         }
     }
-    for(int i = 0; i < 5; i++)
-    {
-    std::string runner[size];
-    copy(runner,*data,size);
-        switch (second)
-        {
-        case 4:
-        if(sorted) {algo2[i] = mergesortTimer(*data, 0 , size); break;}
-        else {algo2[i] = mergesortTimer(runner, 0 , size); break;}
-        case 5:
-        if(sorted) {algo2[i] = quicksortTimer(*data, 0 , size); break;}
-        else {algo2[i] = quicksortTimer(runner, 0 , size); break;}
-        } 
-    }
-    double first_total = 0;
-    double second_total = 0;
+        
+}
     //double send[10];
-    for(int i = 0; i < 5; i++)
-    {
-        address[i] = algo1[i];
-        address[i+5] = algo2[i];
-    }
 
 
+return size;
 
     // std::cout << "Total avg for algo 1 is " << first_total/5 << std::endl;
     // std::cout << "Total avg for algo 2 is " << second_total/5 << std::endl;
@@ -377,13 +393,157 @@ void run_algo()
         std::string arr[] = {"an", "the", "a"};
         std::string *data;
         process_data();
-        bool sorted = true;
-        double unsorted_data[10];
-        run_time_call(arr, &data, !sorted, unsorted_data);
-        std::cout << unsorted_data[0];
 
-        double sorted_data[10];
-        run_time_call(arr, &data, sorted, sorted_data);
+    int *n = pick_algo();
+    int first = n[0];
+    int second = n[1];
+    int a[] = {first,second};
+    
+        double short_file[21];
+        int size = run_time_call(arr, &data, short_file, first, second);
+        print_time(short_file,20, a);
+        print_last(data,size);
+        delete n;
 
     }
+}
+
+void print_time(double values[], int size , int algo[])
+{
+    std::string Algo1 = "Algorithm 1 (n^2)";
+    std::string Algo2 = "Algorithm 2 (nlog(n))";
+    std::string algo1;
+    std::string algo2;
+    std::string algo1_type;
+    std::string algo2_type;
+    for(int i = 0; i < 2; i++){
+    switch(algo[i])
+    {
+    case 1:
+    algo1 = "Selection Sort";
+    algo1_type= "n^2";
+        break;
+    case 2:
+        algo1 = "Insertion Sort";
+        algo1_type= "n^2";
+        break;
+    case 3:
+        algo1 = "Optimized Bubble Sort";
+        algo1_type= "n^2";
+        break;
+    case 4:
+        algo2 = "Merge Sort";
+        algo2_type ="nlog(n)";
+        break;
+    case 5:
+        Algo2 = "Quick Sort";
+        algo2_type ="nlog(n)";
+        break;
+    default:
+        break;
+    }
+    }
+
+
+    // values for controlling format
+    const std::string sep = " |" ;
+    const int total_width = algo1.length()*2 + algo2.length()*2 + algo2_type.length()*2 + sep.size() * 4 ;
+    const std::string line = sep + std::string( total_width-1, '-' ) + '|' ;
+
+    std::cout << line << '\n' << sep
+              << std::setw(18) << "Algorithm" << sep << std::setw(18) << "Complexity" << sep
+              << std::setw(18) << "Realized run time" << sep << std::setw(18) << "Sorted/un-sorted" << sep << std::endl;
+
+    for( int i = 0 ; i < 5 ; ++i )
+    {
+        std::cout << sep << std::setw(algo1.length()) << algo1 << sep << std::setw(algo2_type.length()) << algo1_type << sep << std::setw(3)<<std::setprecision(5) <<  values[i]<< sep << std::setw(9) <<  "Un-Sorted "<< sep   <<std::endl;
+    }
+    for( int i = 10 ; i < 15 ; ++i )
+    {
+        std::cout << sep << std::setw(algo1.length()) << algo1 << sep << std::setw(algo2_type.length()) << algo1_type << sep << std::setw(3) <<std::setprecision(5) <<  values[i]<< sep << std::setw(9) <<  "Sorted "<< sep  <<std::endl;
+    }
+
+
+
+        for( int i = 5 ; i < 10 ; ++i )
+    {
+        std::cout << sep << std::setw(algo1.length()) << algo2 << sep << std::setw(algo2_type.length()) <<  algo2_type << std::setw(3) << sep << std::setprecision(5) << values[i] << sep << std::setw(9) <<   "Un-Sorted "<< sep <<std::endl;
+//       << std::setw(dbl_width) << netpay << sep << '\n' ;
+    }
+            for( int i = 16 ; i < 20 ; ++i )
+    {
+        std::cout << sep << std::setw(algo1.length()) << algo2 << sep << std::setw(algo2_type.length()) <<  algo2_type << std::setw(3)  <<std::setprecision(5) <<  values[i] << sep << std::setw(9)  <<  "Sorted "<< sep <<std::endl;
+//       << std::setw(dbl_width) << netpay << sep << '\n' ;
+    }
+    std::cout << line << '\n' ;
+
+    std::cout << "ASSESSMENT of Algorithm 1: " << "Algorithm 1 would be classified as n^2. Meaning that as the data set get larger, the time taken to complete an operation would be that squared." std::endl;
+    std::cout << "ASSESSMENT of Algorithm 2: " << "Algorithm 2 would be classified as n log(n). Meaning that its generally more efficient because the growth rate is negligible compared to n^2. To accomplish this, a halving method is applied to quickly sort less and less items." <<  std::endl;
+}
+
+// void handle_offset(double [], double [])
+// {
+// }
+
+
+   void greet()
+   {
+        std::cout << "Hello Welcome to my algorithm comparison project! You will be able to run a handful of popular algorithms against each other.\n";
+        std::cout << "Would you like to enter the program?\n";
+        std::cout<< "Please enter yes or no?\n> ";
+   }
+ 
+/**
+* @brief gets the users responce to yes or no questions
+* @param  NONE
+* @return bool true if the answer is yes, false if the answer is no
+*/
+bool enter()
+{
+   bool return_value;
+   std::string yes_no;
+   bool reprompt = false;
+       while(!reprompt) // this is the first instance of input validation which only accepts yes or Yes or No or no and will keep prompting until valid
+       {
+           if(std::cin.fail()) std::cin.ignore(100,'\n'); // ignores the flag on the error
+           std::cin >> yes_no;
+           if(yes_no =="yes" || yes_no =="Yes")// the logic below compares the string to the 4 possible values, and then returns true or false to either enter the if statement or skip to the else statement in the main function
+           {
+               reprompt = true;
+               return_value = true;
+           }
+           else if (yes_no =="no" || yes_no =="No")
+           {
+               reprompt = true;
+               return_value = false;
+           }
+           else
+           {
+               std::cout<<"Please enter yes or no only\n> ";
+           }
+       }
+   return return_value;
+}
+
+void print_last(std::string a[], int s)
+{
+    std::cout << "___________________________________________________" << std::endl;
+    std::cout << " Here are the first 50 words from the sorted list" << std::endl;
+    std::cout << "___________________________________________________" << std::endl;
+    for (int i = 0; i < 50; i++)
+    {
+        std::cout << a[i] << " ";
+        if(i%5==2)std::cout << std::endl;
+    }
+     std::cout << std::endl;
+    std::cout << "___________________________________________________" << std::endl;
+    std::cout << " Here are the Last 50 words from the sorted list" << std::endl;
+    std::cout << "___________________________________________________" << std::endl;
+    for (int i = s-50; i < s; i++)
+    {
+        std::cout << a[i] << " ";
+        if(i%5==2)std::cout << std::endl;
+    }
+    std::cout << std::endl;
+
 }

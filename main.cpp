@@ -3,7 +3,24 @@
 
 int main()
 {
-    run_algo();
+    greet();
+    bool dec = enter();
+    while(dec)
+    {
+        run_algo();
+        std::cout << "Would you like to try the program again?\n-> ";
+        dec = enter();
+    }
+    std::cout << "Have a great day. I hope you enjoyed my project";
+        
+    // std::string arr[] = {"an", "the", "a"};
+
+    //     std::string *data;
+    //     process_data();
+        // int size = load_data(arr,&data);
+        //  size = load_data(arr,&data);
+
+    //run_algo();
 
 //     int size = load_data(arr,&data);
 //    std::cout << data[0];
