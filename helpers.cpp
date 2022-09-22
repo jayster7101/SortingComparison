@@ -447,35 +447,33 @@ void print_time(double values[], int size , int algo[])
 
     // values for controlling format
     const std::string sep = " |" ;
-    const int total_width = algo1.length()*2 + algo2.length()*2 + algo2_type.length()*2 + sep.size() * 4 ;
-    const std::string line = sep + std::string( total_width-1, '-' ) + '|' ;
 
-    std::cout << line << '\n' << sep
+    std::cout << "|--------------------------------------------------------------------------------------|" << '\n' << sep
               << std::setw(18) << "Algorithm" << sep << std::setw(18) << "Complexity" << sep
               << std::setw(18) << "Realized run time" << sep << std::setw(18) << "Sorted/un-sorted" << sep << std::endl;
 
     for( int i = 0 ; i < 5 ; ++i )
     {
-        std::cout << sep << std::setw(algo1.length()) << algo1 << sep << std::setw(algo2_type.length()) << algo1_type << sep << std::setw(3)<<std::setprecision(5) <<  values[i]<< sep << std::setw(9) <<  "Un-Sorted "<< sep   <<std::endl;
+        std::cout << sep << std::setw(algo1.length()) << algo1 << sep << std::setw(algo2_type.length()) << algo1_type << sep << std::setw(10)<<std::setprecision(8) <<  values[i] << sep << std::setw(9) <<  "Un-Sorted "<< sep   <<std::endl;
     }
     for( int i = 10 ; i < 15 ; ++i )
     {
-        std::cout << sep << std::setw(algo1.length()) << algo1 << sep << std::setw(algo2_type.length()) << algo1_type << sep << std::setw(3) <<std::setprecision(5) <<  values[i]<< sep << std::setw(9) <<  "Sorted "<< sep  <<std::endl;
+        std::cout << sep << std::setw(algo1.length()) << algo1 << sep << std::setw(algo2_type.length()) << algo1_type << sep << std::setw(10) <<std::setprecision(8) <<  values[i] << sep << std::setw(9) <<  "Sorted "<< sep  <<std::endl;
     }
 
 
 
         for( int i = 5 ; i < 10 ; ++i )
     {
-        std::cout << sep << std::setw(algo1.length()) << algo2 << sep << std::setw(algo2_type.length()) <<  algo2_type << std::setw(3) << sep << std::setprecision(5) << values[i] << sep << std::setw(9) <<   "Un-Sorted "<< sep <<std::endl;
+        std::cout << sep << std::setw(algo1.length()) << algo2 << sep << std::setw(algo2_type.length()) <<  algo2_type << sep << std::setw(10) << std::setprecision(8) << values[i] << sep << std::setw(9) <<   "Un-Sorted "<< sep <<std::endl;
 //       << std::setw(dbl_width) << netpay << sep << '\n' ;
     }
             for( int i = 16 ; i < 20 ; ++i )
     {
-        std::cout << sep << std::setw(algo1.length()) << algo2 << sep << std::setw(algo2_type.length()) <<  algo2_type << std::setw(3)  <<std::setprecision(5) <<  values[i] << sep << std::setw(9)  <<  "Sorted "<< sep <<std::endl;
-//       << std::setw(dbl_width) << netpay << sep << '\n' ;
+        std::cout << sep << std::setw(algo1.length()) << algo2 << sep << std::setw(algo2_type.length()) <<  algo2_type << sep << std::setw(10) <<std::setprecision(8) <<  values[i] << sep << std::setw(9)  <<  "Sorted "<< sep <<std::endl;
+//       << std::setw(dbl_width) << netpay << sep << '\n' 
     }
-    std::cout << line << '\n' ;
+    std::cout << std::cout << "|--------------------------------------------------------------------------------------|" << '\n' << sep << '\n' ;
 
     std::cout << "ASSESSMENT of Algorithm 1: " << "Algorithm 1 would be classified as n^2. Meaning that as the data set get larger, the time taken to complete an operation would be that squared."  << std::endl;
     std::cout << "ASSESSMENT of Algorithm 2: " << "Algorithm 2 would be classified as n log(n). Meaning that its generally more efficient because the growth rate is negligible compared to n^2. To accomplish this, a halving method is applied to quickly sort less and less items." <<  std::endl;
