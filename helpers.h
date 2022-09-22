@@ -12,8 +12,9 @@ int run_time_call(std::string [], std::string*, double[], int, int);
 int* pick_algo();
 void display_list(int);
 void copy(std::string[], std::string *, int);  
-void run_algo();// runs all algos and records all times
-
+void run_algo(double []);// runs all algos and records all times
+void copy_results(double [], double [], int size);
+void find_avg(double first[], double second[]);
 void swap(std::string&, std::string&); // swaps the postion of two values 
 void print_time(double [], int , int[] );
 void print_last(std::string a[], int s);

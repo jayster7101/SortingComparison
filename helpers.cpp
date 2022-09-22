@@ -385,7 +385,7 @@ return size;
  * 
  */
 
-void run_algo()
+void run_algo(double results[])
 {
     bool same_file = false;
     //while()
@@ -403,8 +403,8 @@ void run_algo()
         int size = run_time_call(arr, &data, short_file, first, second);
         print_time(short_file,20, a);
         print_last(data,size);
+        copy_results(results,short_file,20);
         delete n;
-
     }
 }
 
@@ -473,7 +473,7 @@ void print_time(double values[], int size , int algo[])
         std::cout << sep << std::setw(algo1.length()) << algo2 << sep << std::setw(algo2_type.length()) <<  algo2_type << sep << std::setw(10) <<std::setprecision(8) <<  values[i] << sep << std::setw(9)  <<  "Sorted "<< sep <<std::endl;
 //       << std::setw(dbl_width) << netpay << sep << '\n' 
     }
-    std::cout << std::cout << "|--------------------------------------------------------------------------------------|" << '\n' << sep << '\n' ;
+    //std::cout << std::cout << "|--------------------------------------------------------------------------------------|" << '\n' << sep << '\n' ;
 
     std::cout << "ASSESSMENT of Algorithm 1: " << "Algorithm 1 would be classified as n^2. Meaning that as the data set get larger, the time taken to complete an operation would be that squared."  << std::endl;
     std::cout << "ASSESSMENT of Algorithm 2: " << "Algorithm 2 would be classified as n log(n). Meaning that its generally more efficient because the growth rate is negligible compared to n^2. To accomplish this, a halving method is applied to quickly sort less and less items." <<  std::endl;
@@ -544,4 +544,100 @@ void print_last(std::string a[], int s)
     }
     std::cout << std::endl;
 
+}
+
+
+void copy_results(double a[], double b[], int size)
+{
+    for(int i = 0; i < size; i++)
+    {
+        a[i] = b[i];
+    }
+}
+
+void find_avg(double first[], double second[])
+{
+    double file_s[20];
+    double file_l[20];
+
+    double run1A1UN;
+    double run1A1S;
+    double run1A2UN;
+    double run1A2S;
+    double run2A1UN;
+    double run2A1S;
+    double run2A2UN;
+    double run2A2S;
+    double avg = 0;
+    // for(int i = 0; i < 5; i++)
+    //     {
+    //         avg += first[i]; // unsorted n^2 0 - 4 
+    //         run1UN[i] = first[i+10]; // unsorted n^2 0 - 4 
+
+    //         file_s[i+10] = first[i]; // sorted n^2 10 - 14 
+    //     }
+    for (int i = 0; i < 20; i++)
+    {
+        if( i < 5) run1A1UN += first[i];
+        if(i > 4 && i  < 10) run1A1S+= first[i];
+        if(i > 9 && i < 15) run1A2UN += first[i];
+        if(i > 14 && i < 20) run1A2S+= first[i];
+    }
+
+        for (int i = 0; i < 20; i++)
+    {
+        if(i < 5) run2A1UN += second[i];
+        if(i > 4 && i  < 10) run2A1S+= second[i];
+        if(i > 9 && i < 15) run2A2UN += second[i];
+        if(i > 14 && i < 20) run2A2S+= second[i];
+    }
+    std ::cout << "The average run for n^2 algo on short file un-sorted is " << run1A1UN/5 << std::endl;
+    std ::cout << "The average run for n^2 algo on short file sorted is " << run1A1S/5 << std::endl;
+    std ::cout << "The average run for n^2 algo on Long file un-sorted is " << run1A2UN/5 << std::endl;
+    std ::cout << "The average run for n^2 algo on short file un-sorted is " << run1A2S/5 << std::endl;
+    
+    std ::cout << "The average run for n log(n) algo on short file un-sorted is " << run2A1UN/5 << std::endl;
+    std ::cout << "The average run for n log(n) algo on short file sorted is " << run2A1S/5 << std::endl;
+    std ::cout << "The average run for n log(n) algo on Long file un-sorted is " << run2A2UN/5 << std::endl;
+    std ::cout << "The average run for n log(n) algo on short file un-sorted is " << run2A2S/5 << std::endl;
+
+
+
+
+
+
+
+    // for(int k = 0; k < 2; k++)
+    // {    
+    //     for(int i = 0; i < 5; i++)
+    //     {
+    //         if(k == 0 ) 
+    //         {
+    //             file_s[i] = first[i]; // unsorted n^2 0 - 4 
+    //             file_s[i + 5] = first[i]; // unsorted n log(n) = 5 - 9
+    //         }
+    //         if(k == 1)
+    //         {
+    //             file_s[i+10] = first[i]; // sorted n^2 10 - 14 
+    //             file_s[i + 15] = first[i];  // sorted n log(n) = 15 - 19
+    //         }
+    //     }
+    // }
+
+    //     for(int k = 0; k < 2; k++)
+    // {    
+    //     for(int i = 0; i < 5; i++)
+    //     {
+    //         if(k == 0 ) 
+    //         {
+    //             file_l[i] = first[i]; // unsorted n^2 0 - 4 
+    //             file_l[i + 5] = second[i]; // unsorted n log(n) = 5 - 9
+    //         }
+    //         if(k == 1)
+    //         {
+    //             file_l[i+10] = first[i]; // sorted n^2 10 - 14 
+    //             file_l[i + 15] = algo2[i];  // sorted n log(n) = 15 - 19
+    //         }
+    //     }
+    // }
 }

@@ -5,11 +5,17 @@ int main()
 {
     greet();
     bool dec = enter();
+    double results1[20];
+    double results2[20];
+
     while(dec)
     {
-        run_algo();
+         run_algo(results1);
+         run_algo(results2);
+         find_avg(results1,results2);
         std::cout << "Would you like to try the program again?\n-> ";
         dec = enter();
+        
     }
     std::cout << "Have a great day. I hope you enjoyed my project";
         
