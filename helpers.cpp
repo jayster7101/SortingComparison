@@ -477,7 +477,7 @@ void print_time(double values[], int size , int algo[])
     }
     std::cout << line << '\n' ;
 
-    std::cout << "ASSESSMENT of Algorithm 1: " << "Algorithm 1 would be classified as n^2. Meaning that as the data set get larger, the time taken to complete an operation would be that squared." std::endl;
+    std::cout << "ASSESSMENT of Algorithm 1: " << "Algorithm 1 would be classified as n^2. Meaning that as the data set get larger, the time taken to complete an operation would be that squared."  << std::endl;
     std::cout << "ASSESSMENT of Algorithm 2: " << "Algorithm 2 would be classified as n log(n). Meaning that its generally more efficient because the growth rate is negligible compared to n^2. To accomplish this, a halving method is applied to quickly sort less and less items." <<  std::endl;
 }
 
