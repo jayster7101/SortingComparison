@@ -11,6 +11,7 @@ int main()
     while(dec)
     {
          run_algo(results1);
+         std::cout << "Be sure to use the same algorithms you choose in the first step if your goal is to compare speed.\n";
          run_algo(results2);
          find_avg(results1,results2);
         std::cout << "Would you like to try the program again?\n-> ";

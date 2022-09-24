@@ -112,69 +112,16 @@ void process_data()
         prev = ch;
     }
 }
-// int load_data(std::string dont_want[], std::string ** array)
-// {
-//     int size =  ( sizeof(dont_want[0]) / (sizeof(dont_want)));
-//     std:: ifstream in;
-//     in.open("temp.txt");
-//     std::string line;
-//     std::string current;
-//     int count;
-//     while(getline(in,line))
-//     {   
-//         std::stringstream ss(line);
-//         while (ss >> current)
-//         {
-//             bool good = true;
-//             for(int i = 0; i < size; i++)
-//             {
-//                 if(lower(current) == dont_want[i])
-//                 {
-//                     good = false;
-//                     break;
-//                 }
-//             }
-//             if(good) count ++;
-//         }
-//     };
-//     in.close();
-//     in.open("temp.txt");
-//     std::string *temp = new std::string[count];
-//     int t;
-//     while(getline(in,line))
-//     {   
-//         std::stringstream ss(line);
-//         while (ss >> current)
-//         {
 
-//             bool good = true;
-//             for(int i = 0; i < size; i++)
-//             {
-//                 if(lower(current) == dont_want[i])
-//                 {
-//                     good = false;
-//                     break;
-//                 }
-//             }
-//             if(good)
-//             {    
-//                 temp[t] = current;
-//                 t++;
-//             }
-//         }
-//     };
-//     *array = temp; // changes address to array we created in function
-//     return count;
-// }
 
 int load_data(std::string dont_want[], std::string** array)
 {
     int size =  ( sizeof(dont_want[0]) / (sizeof(dont_want)));
     std:: ifstream in;
     in.open("temp.txt");
-    std::string line;
-    std::string current;
-    int count;
+    std::string line = "";
+    std::string current = "";
+    int count = 0;
     while(getline(in,line))
     {   
         std::stringstream ss(line);
@@ -276,6 +223,7 @@ int* pick_algo()
     int *temp = new int[2];
     temp[0] = one;
     temp[1] = two;
+    std::cout << "Great, we will get that started. This could take a minute...\n";
     return temp;
     //std::cout << "Great, we will start working on running " << 
 
@@ -305,10 +253,9 @@ int run_time_call(std::string wrong_words[], std::string **data, double address[
     int size = load_data(wrong_words,data);
     double algo1[5];
     double algo2[5]; 
-    int offset = 0;
     for(int k  =  0; k < 2 ; k++)
 {        
-    if(k == 1) {offset = 5; bubblesortTimer(*data,size);}
+    if(k == 1) {mergesortTimer(*data,0,size);}
     for(int i = 0; i < 5; i++)
         {
             std::string runner[size];
@@ -333,16 +280,16 @@ int run_time_call(std::string wrong_words[], std::string **data, double address[
             switch (second)
             {
             case 4:
-            if(k > 1) {algo2[i] = mergesortTimer(*data, 0 , size); break;}
-            else {algo2[i] = mergesortTimer(runner, 0 , size); break;}
+                if(k > 1) {algo2[i] = mergesortTimer(*data, 0 , size); break;}
+                else {algo2[i] = mergesortTimer(runner, 0 , size); break;}
             case 5:
-            if(k > 1) {algo2[i] = quicksortTimer(*data, 0 , size); break;}
-            else {algo2[i] = quicksortTimer(runner, 0 , size); break;}
+                if(k > 1) {algo2[i] = quicksortTimer(*data, 0 , size); break;}
+                else {algo2[i] = quicksortTimer(runner, 0 , size); break;}
             } 
         }
     for(int i = 0; i < 5; i++)
     {
-        if(k == 0 ) 
+        if(k == 0 ) // unsorted times
         {
             address[i] = algo1[i]; // unsorted n^2 0 - 4 
             address[i + 5] = algo2[i]; // unsorted n log(n) = 5 - 9
@@ -387,23 +334,21 @@ return size;
 
 void run_algo(double results[])
 {
-    bool same_file = false;
-    //while()
     {    
         std::string arr[] = {"an", "the", "a"};
         std::string *data;
         process_data();
-
-    int *n = pick_algo();
-    int first = n[0];
-    int second = n[1];
-    int a[] = {first,second};
+        int *n = pick_algo();
+        int first = n[0];
+        int second = n[1];
+        int a[] = {first,second};
     
-        double short_file[21];
+        double short_file[20];
         int size = run_time_call(arr, &data, short_file, first, second);
         print_time(short_file,20, a);
         print_last(data,size);
         copy_results(results,short_file,20);
+        //delete data;
         delete n;
     }
 }
@@ -412,10 +357,10 @@ void print_time(double values[], int size , int algo[])
 {
     std::string Algo1 = "Algorithm 1 (n^2)";
     std::string Algo2 = "Algorithm 2 (nlog(n))";
-    std::string algo1;
-    std::string algo2;
-    std::string algo1_type;
-    std::string algo2_type;
+    std::string algo1 = "";
+    std::string algo2  ="";
+    std::string algo1_type ="";
+    std::string algo2_type  ="";
     for(int i = 0; i < 2; i++){
     switch(algo[i])
     {
@@ -448,35 +393,37 @@ void print_time(double values[], int size , int algo[])
     // values for controlling format
     const std::string sep = " |" ;
 
-    std::cout << "|--------------------------------------------------------------------------------------|" << '\n' << sep
-              << std::setw(18) << "Algorithm" << sep << std::setw(18) << "Complexity" << sep
-              << std::setw(18) << "Realized run time" << sep << std::setw(18) << "Sorted/un-sorted" << sep << std::endl;
+    std::cout << " |-------------------------------------------------------------------------------------|" << '\n' << sep << 
+              std::left << std::setw(algo1.length()) << "Algorithm" << sep << std::setw(18) << "Complexity" << sep
+              << std::setw(18) << "Realized run time" << sep << std::setw(21) << "Sorted/un-sorted" << sep << std::endl;
+    std::cout << " |-------------------------------------------------------------------------------------|" << std::endl;
 
     for( int i = 0 ; i < 5 ; ++i )
     {
-        std::cout << sep << std::setw(algo1.length()) << algo1 << sep << std::setw(algo2_type.length()) << algo1_type << sep << std::setw(10)<<std::setprecision(8) <<  values[i] << sep << std::setw(9) <<  "Un-Sorted "<< sep   <<std::endl;
+        std::cout << sep << std::setw(algo1.length()) << algo1 << sep << std::setw(18) << algo1_type << sep << std::setw(18)<<std::setprecision(8) <<  values[i] << sep << std::setw(21) <<  "Un-Sorted "<< sep   <<std::endl;
     }
     for( int i = 10 ; i < 15 ; ++i )
     {
-        std::cout << sep << std::setw(algo1.length()) << algo1 << sep << std::setw(algo2_type.length()) << algo1_type << sep << std::setw(10) <<std::setprecision(8) <<  values[i] << sep << std::setw(9) <<  "Sorted "<< sep  <<std::endl;
+        std::cout << sep << std::setw(algo1.length()) << algo1 << sep << std::setw(18) << algo1_type << sep << std::setw(18) <<std::setprecision(8) <<  values[i] << sep << std::setw(21) <<  "Sorted "<< sep  <<std::endl;
     }
 
 
 
         for( int i = 5 ; i < 10 ; ++i )
     {
-        std::cout << sep << std::setw(algo1.length()) << algo2 << sep << std::setw(algo2_type.length()) <<  algo2_type << sep << std::setw(10) << std::setprecision(8) << values[i] << sep << std::setw(9) <<   "Un-Sorted "<< sep <<std::endl;
+        std::cout << sep << std::setw(algo1.length()) << algo2 << sep << std::setw(18) <<  algo2_type << sep << std::setw(18) << std::setprecision(8) << values[i] << sep << std::setw(21) <<   "Un-Sorted "<< sep <<std::endl;
 //       << std::setw(dbl_width) << netpay << sep << '\n' ;
     }
-            for( int i = 16 ; i < 20 ; ++i )
+            for( int i = 15 ; i < 20 ; ++i )
     {
-        std::cout << sep << std::setw(algo1.length()) << algo2 << sep << std::setw(algo2_type.length()) <<  algo2_type << sep << std::setw(10) <<std::setprecision(8) <<  values[i] << sep << std::setw(9)  <<  "Sorted "<< sep <<std::endl;
+        std::cout << sep << std::setw(algo1.length()) << algo2 << sep << std::setw(18) <<  algo2_type << sep << std::setw(18) <<std::setprecision(8) <<  values[i] << sep << std::setw(21)  <<  "Sorted "<< sep <<std::endl;
 //       << std::setw(dbl_width) << netpay << sep << '\n' 
     }
+    std::cout << " |-------------------------------------------------------------------------------------|" << std::endl;
     //std::cout << std::cout << "|--------------------------------------------------------------------------------------|" << '\n' << sep << '\n' ;
 
-    std::cout << "ASSESSMENT of Algorithm 1: " << "Algorithm 1 would be classified as n^2. Meaning that as the data set get larger, the time taken to complete an operation would be that squared."  << std::endl;
-    std::cout << "ASSESSMENT of Algorithm 2: " << "Algorithm 2 would be classified as n log(n). Meaning that its generally more efficient because the growth rate is negligible compared to n^2. To accomplish this, a halving method is applied to quickly sort less and less items." <<  std::endl;
+    std::cout << "ASSESSMENT of Algorithm 1:\n" << "    Algorithm 1 would be classified as n^2. Meaning that as the data set get larger, the time taken to complete an operation would be that squared."  << std::endl << std::endl;
+    std::cout << "ASSESSMENT of Algorithm 2:\n" << "    Algorithm 2 would be classified as n log(n). Meaning that its generally more efficient because the growth rate is negligible compared to n^2. To accomplish this, a halving method is applied to quickly sort less and less items." <<  std::endl <<  std::endl;
 }
 
 // void handle_offset(double [], double [])
@@ -525,23 +472,51 @@ bool enter()
 
 void print_last(std::string a[], int s)
 {
-    std::cout << "___________________________________________________" << std::endl;
-    std::cout << " Here are the first 50 words from the sorted list" << std::endl;
-    std::cout << "___________________________________________________" << std::endl;
-    for (int i = 0; i < 50; i++)
+    int l = 0;
+    int total_l = 0;
+    std::cout << "_____________________________________________________" << std::endl;
+    std::cout << std::setw(52) << "|Here are the First 50 words from the sorted list" << "|" << std::endl;
+    std::cout << "|___________________________________________________|" << std::endl;
+    std::cout << "|";
+    for (int i = 0; i < 50; i++) 
     {
+        if(l == 5)
+        {
+            std::cout << std::setw(51 - total_l) << " " << "|";
+            std::cout << std::endl;
+            std::cout << "|";
+            l = 0;
+            total_l = 0;
+        }
         std::cout << a[i] << " ";
-        if(i%5==2)std::cout << std::endl;
+        total_l += a[i].length() + 1;
+        l++;
     }
-     std::cout << std::endl;
-    std::cout << "___________________________________________________" << std::endl;
-    std::cout << " Here are the Last 50 words from the sorted list" << std::endl;
-    std::cout << "___________________________________________________" << std::endl;
+    std::cout << std::setw(21) << " " << "|"<< std::endl;
+    std::cout << "_____________________________________________________" << std::endl;
+    l = 0;
+    total_l = 0;
+    std::cout << std::endl;
+    std::cout << "|___________________________________________________|" << std::endl;
+    std::cout << std::setw(52) << "|Here are the Last 50 words from the sorted list" << "|" << std::endl;
+    std::cout << "|___________________________________________________|" << std::endl;
+    std::cout << "|";
     for (int i = s-50; i < s; i++)
     {
+        if(l == 5)
+        {
+            std::cout << std::setw(51 - total_l) << " " << "|";
+            std::cout << std::endl;
+            std::cout << "|";
+            l = 0;
+            total_l = 0;
+        }
         std::cout << a[i] << " ";
-        if(i%5==2)std::cout << std::endl;
+        l++;
+        total_l += a[i].length() + 1; 
     }
+    std::cout << std::setw(21) << " " << "|" << std::endl;
+    std::cout << "|___________________________________________________|" << std::endl;
     std::cout << std::endl;
 
 }
@@ -560,15 +535,14 @@ void find_avg(double first[], double second[])
     double file_s[20];
     double file_l[20];
 
-    double run1A1UN;
-    double run1A1S;
-    double run1A2UN;
-    double run1A2S;
-    double run2A1UN;
-    double run2A1S;
-    double run2A2UN;
-    double run2A2S;
-    double avg = 0;
+    double run1A1UN = 0;
+    double run1A1S = 0;
+    double run1A2UN  = 0;
+    double run1A2S = 0;
+    double run2A1UN = 0;
+    double run2A1S = 0;
+    double run2A2UN = 0;
+    double run2A2S = 0;
     // for(int i = 0; i < 5; i++)
     //     {
     //         avg += first[i]; // unsorted n^2 0 - 4 
@@ -578,28 +552,32 @@ void find_avg(double first[], double second[])
     //     }
     for (int i = 0; i < 20; i++)
     {
-        if( i < 5) run1A1UN += first[i];
-        if(i > 4 && i  < 10) run1A1S+= first[i];
-        if(i > 9 && i < 15) run1A2UN += first[i];
-        if(i > 14 && i < 20) run1A2S+= first[i];
+        if(i < 5) run1A1UN += first[i];
+        if(i > 4 && i  < 10) run1A2UN += first[i];
+        if(i > 9 && i < 15) run1A1S += first[i];
+        if(i > 14 && i < 20) run1A2S += first[i];
     }
 
         for (int i = 0; i < 20; i++)
     {
         if(i < 5) run2A1UN += second[i];
-        if(i > 4 && i  < 10) run2A1S+= second[i];
-        if(i > 9 && i < 15) run2A2UN += second[i];
-        if(i > 14 && i < 20) run2A2S+= second[i];
+        if(i > 4 && i  < 10) run2A2UN += second[i];
+        if(i > 9 && i < 15) run2A1S += second[i];
+        if(i > 14 && i < 20) run2A2S += second[i];
     }
     std ::cout << "The average run for n^2 algo on short file un-sorted is " << run1A1UN/5 << std::endl;
     std ::cout << "The average run for n^2 algo on short file sorted is " << run1A1S/5 << std::endl;
-    std ::cout << "The average run for n^2 algo on Long file un-sorted is " << run1A2UN/5 << std::endl;
-    std ::cout << "The average run for n^2 algo on short file un-sorted is " << run1A2S/5 << std::endl;
-    
-    std ::cout << "The average run for n log(n) algo on short file un-sorted is " << run2A1UN/5 << std::endl;
-    std ::cout << "The average run for n log(n) algo on short file sorted is " << run2A1S/5 << std::endl;
+    std ::cout << "The average run for n^2 algo on Long file un-sorted is " << run2A1UN/5 << std::endl; 
+    std ::cout << "The average run for n^2 algo on long file sorted is " << run2A1S/5 << std::endl;
+    //<<std::setprecision(8) 
+    std ::cout << "The average run for n log(n) algo on short file un-sorted is " << run1A2UN/5 << std::endl;
+    std ::cout << "The average run for n log(n) algo on short file sorted is " << run1A2S/5 << std::endl;
     std ::cout << "The average run for n log(n) algo on Long file un-sorted is " << run2A2UN/5 << std::endl;
-    std ::cout << "The average run for n log(n) algo on short file un-sorted is " << run2A2S/5 << std::endl;
+    std ::cout << "The average run for n log(n) algo on long file sorted is " << run2A2S/5 << std::endl;
+
+    //     double t = 0;
+
+    // std::cout << t/5 << std::endl;
 
 
 
@@ -632,6 +610,8 @@ void find_avg(double first[], double second[])
     //         {
     //             file_l[i] = first[i]; // unsorted n^2 0 - 4 
     //             file_l[i + 5] = second[i]; // unsorted n log(n) = 5 - 9
+    //             file_l[i+10] = first[i]; // sorted n^2 10 - 14 
+    //             file_l[i + 15] = algo2[i];  // sorted n log(n) = 15 - 19
     //         }
     //         if(k == 1)
     //         {
@@ -640,4 +620,18 @@ void find_avg(double first[], double second[])
     //         }
     //     }
     // }
+}
+
+
+std::string lower(std::string s )
+{
+    std::string temp;
+    for(int i = 0; i < s.length(); i++)
+    {
+        temp += tolower(s[i]);
+    }
+    return temp;
+    // change string to lower 
+    // return string thats all lower case 
+
 }

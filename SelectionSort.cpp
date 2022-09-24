@@ -22,18 +22,7 @@ int min_pos(std::string a[], int from , int to)
     return min_pos;
 }
 
-std::string lower(std::string s )
-{
-    std::string temp;
-    for(int i = 0; i < s.length(); i++)
-    {
-        temp += tolower(s[i]);
-    }
-    return temp;
-    // change string to lower 
-    // return string thats all lower case 
 
-}
 
 
 double selectionsortTimer(std::string a[], int to)

@@ -54,7 +54,8 @@ void merge(std::string a[], int from, int mid, int to) {
   //std::string *temp = new std::string[to];
 
   while (i <= mid && j <= to) {
-    if (lower(a[i]) <= lower(a[j])) {
+    if (lower(a[i]) <= lower(a[j])) 
+    {
       temp[k] = a[i];
       i++;
       k++;
